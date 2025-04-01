@@ -21,7 +21,7 @@
   - name: allow remote conncections
     ansible.builtin.replace:
       path: /etc/mongod.conf
-      regexp: '127.0.0.1'  # Basically we check this in mongodb server by "netstat -lntp"
+      regexp: '127.0.0.1'  # We can cross check this in mongodb server by "netstat -lntp"
       replace: '0.0.0.0'
 
   - name: start and enable mongodb
