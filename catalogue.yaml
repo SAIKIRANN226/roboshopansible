@@ -3,9 +3,7 @@
   become: yes
   tasks:
   - name: disable old nodejs and enable nodejs  # Just search ansible dnf module
-    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y  # If we don't find module in default ansible document then we can use shell (or) command. Here in this case "ansible.builtin.command" is not working because Command ---> Won't respect target machines,shell variables and environment, it is running the command outside ; Shell ---> It is like you logged in inside the target machine directly and running command
-    # If i login to the catalouge and run the "dnf module disable nodejs -y ; dnf module enable nodejs:18 -y" it can easily run but when you are running this from outside the command, then it will consider these two as one command, thats why shell is slow
-    # Search difference between ansible.builtin.command and ansible.builtin.shell
+    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y  # If we don't find module in default ansible document then we can use shell (or) command. Here in this case "ansible.builtin.command" is not working because Command ---> Won't respect target machines,shell variables and environment, it is running the command outside ; Shell ---> It is like you logged in inside the target machine directly and running command and If i login to the catalouge and run the "dnf module disable nodejs -y ; dnf module enable nodejs:18 -y" it can easily run but when you are running this from outside the command, then it will consider these two as one command, thats why shell is slow and also Search difference between ansible.builtin.command and ansible.builtin.shell in google
 
   - name: Install nodejs
     ansible.builtin.dnf:
