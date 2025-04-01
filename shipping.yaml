@@ -67,7 +67,7 @@
       msg: "schema output: {{schema}}"
 
   - name: load cities data
-    ansible.builtin.shell: "mysql -h mysql.daws76s.online -uroot -p{{mysql_password}}  < /app/schema/shipping.sql"  #Shell--> it is like you login inside server and running the command,env variables and redirections symbols will work; Command--> it is like running command ooutside the server,env variables and redirections symbols will not work
+    ansible.builtin.shell: "mysql -h mysql.daws76s.online -uroot -p{{mysql_password}}  < /app/schema/shipping.sql"  # Shell--> It is like you login inside server and running the command,env variables and redirections symbols will work; Command--> It is like running command outside the server,env variables and redirections symbols will not work
     when: schema.stdout != "1"
 
   - name: start and enable shipping
