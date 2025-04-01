@@ -3,8 +3,9 @@
   become: yes
   tasks:
   - name: disable old nodejs and enable nodejs  # Just search ansible dnf module
-    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y  # If we dont find module in default ansible document then we can use shell (or) command. Here in this case "ansible.builtin.command" is not working because command ---> Wont respect target machine,shell variables and environment it is running the command outside ; shell ---> It is like you logged in inside the target machine directly and running command
-    # If i login to the catalouge and run the "dnf module disable nodejs -y ; dnf module enable nodejs:18 -y" it can easily run but when you are running this outside the command it will consider these two as one command,thats why shell is slow
+    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y  # If we don't find module in default ansible document then we can use shell (or) command. Here in this case "ansible.builtin.command" is not working because Command ---> Won't respect target machines,shell variables and environment, it is running the command outside ; Shell ---> It is like you logged in inside the target machine directly and running command
+    # If i login to the catalouge and run the "dnf module disable nodejs -y ; dnf module enable nodejs:18 -y" it can easily run but when you are running this from outside the command, then it will consider these two as one command, thats why shell is slow
+    # Search difference between ansible.builtin.command and ansible.builtin.shell
 
   - name: Install nodejs
     ansible.builtin.dnf:
@@ -34,7 +35,7 @@
     ansible.builtin.unarchive:  
       src: /tmp/catalogue.zip
       dest: /app
-      remote_src: yes    # We are just telling to ansible server(ansible controller)that we are already downloaded the file(above catalogue application)in the remote machine(catalogue),so no need to worry and no need to find in your ansible controller,it is already there in the target machine just unarchive it by giving "remote_src"
+      remote_src: yes    # We are just telling to ansible server(ansible controller)that we are already downloaded the file(above catalogue application)in the remote machine(catalogue),so no need to worry and no need to find in your ansible controller,it is already there in the target machine just unarchive it by giving "remote_src:yes"
 
   - name: Install dependencies
     ansible.builtin.command: npm install
@@ -66,13 +67,13 @@
     ansible.builtin.command:  mongo --host mongodb.daws76s.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'  # ansible.builtin.command is nothing but running above big command in the server,take that command output in a register with a variable name(product_count)
     register: product_count # The above large command is to get the catagories count and registering the product count in a variable register
 
-  # - name: print the count
-  #   ansible.builtin.debug:
-  #     msg: "product count: {{product_count}}"
+  - name: print the count
+    ansible.builtin.debug:
+      msg: "product count: {{product_count}}"
 
   - name: load catalogue data
     ansible.builtin.command: mongo --host mongodb.daws76s.online < /app/schema/catalogue.js
-    when: product_count.stdout == "0" # Keep double quotes that means if product count is 0 then only run and load the catagories otherwise ignore
+    when: product_count.stdout == "0" # Keep double quotes that means if product count is "0" then only run and load the catagories otherwise ignore
 
   - name: start and enable catalogue
     ansible.builtin.service:
